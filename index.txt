@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    
+    <script>
+      AFRAME.registerComponent('force-material', {
+        init: function () {
+          this.el.addEventListener('model-loaded', () => {
+            const mesh = this.el.getObject3D('mesh');
+            mesh.traverse((node) => {
+              if (node.isMesh) {
+                node.material.color.set('#FFC0CB'); // Pink
+                node.material.transparent = true;
+                node.material.opacity = 0.8;
+                node.material.needsUpdate = true;
+              }
+            });
+          });
+        }
+      });
+    </script>
+    <style>body { margin: 0; overflow: hidden; }</style>
+  </head>
+  <body>
+    <a-scene 
+      mindar-image="imageTargetSrc: targets.mind; uiScanning: yes; filterMinCF: 0.0001; filterBeta: 0.001" 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <a-asset-item id="cornerModel" src="cornerwall.glb"></a-asset-item>
+        <a-asset-item id="stairsModel" src="stairs.glb"></a-asset-item>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-entity position="0 0 0.6" rotation="-90 0 0" scale="10 10 10">
+          <a-gltf-model src="#cornerModel" force-material></a-gltf-model>
+        </a-entity>
+      </a-entity>
+
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-entity position="0 0 0.6" rotation="-90 0 0" scale="10 10 10">
+          <a-gltf-model src="#stairsModel" force-material></a-gltf-model>
+        </a-entity>
+      </a-entity>
+
+    </a-scene>
+  </body>
+</html>
